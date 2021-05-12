@@ -8,7 +8,7 @@ DEBUG = True
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-mongo_client = pymongo.MongoClient("mongodb://datinguser:datinguserpasswd@ff4c716a611f:27017/")
+mongo_client = pymongo.MongoClient("mongodb://datinguser:datinguserpasswd@mongodb:27017/")
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 

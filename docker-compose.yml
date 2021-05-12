@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  client:
+    build: client
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./client:/client
+    environment:
+      NODE_APP: client
+      NODE_ENV: development
+    links:
+      - backend
+
+  backend:
+    build: backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/backend
+    environment:
+      FLASK_APP: app
+      FLASK_RUN_HOST: 0.0.0.0
+      FLASK_ENV: development
+    links:
+      - mongo
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: datinguser
+      ME_CONFIG_MONGODB_ADMINPASSWORD: datinguserpasswd
+    links:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: datinguser
+      MONGO_INITDB_ROOT_PASSWORD: datinguserpasswd

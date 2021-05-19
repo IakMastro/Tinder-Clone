@@ -3,6 +3,7 @@ version: "3.8"
 services:
   client:
     build: client
+    container_name: tinder_client
     ports:
       - "8080:8080"
     volumes:
@@ -15,6 +16,7 @@ services:
 
   backend:
     build: backend
+    container_name: tinder_api
     ports:
       - "5000:5000"
     volumes:
@@ -29,6 +31,7 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
+    container_name: mongo-express_tinder
     ports:
       - "8081:8081"
     environment:
@@ -38,11 +41,14 @@ services:
       - mongo
 
   mongo:
-    image: mongo
-    container_name: mongodb
+    build: db
+    container_name: mongodb_tinder
     restart: always
     ports:
       - "27017:27017"
+    volumes:
+      - ./db/data:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: datinguser
       MONGO_INITDB_ROOT_PASSWORD: datinguserpasswd
+      MONGO_INITDB_DATABASE: tinderClone

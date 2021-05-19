@@ -4,6 +4,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 
+# TODO: Find origin of CORS error and fix it
+
 # Configuration
 DEBUG = True
 

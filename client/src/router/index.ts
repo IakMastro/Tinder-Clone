@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Ping from '../components/Ping.vue'
+import Login from '../components/Login.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Ping',
-    component: Ping
+    name: 'Login',
+    component: Login
   },
 ]
 

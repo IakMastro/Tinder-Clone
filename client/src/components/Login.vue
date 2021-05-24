@@ -121,7 +121,7 @@ export default {
       },
       message: '',
       showMessage: false,
-      path: 'http://tinder_api:5000',
+      path: 'http://localhost:5000',
     };
   },
 
@@ -132,9 +132,10 @@ export default {
   methods: {
     onLogin() {
       const payload = {
-        username: $('#inputUsername').val(),
-        password: $('#inputPassword').val(),
+        email: $('#email').val(),
+        password: $('#pwd').val(),
       };
+      console.log(payload)
 
       this.login(payload);
     },
@@ -183,6 +184,8 @@ export default {
           password: this.registerForm.password,
           birthday: this.registerForm.birthday
         };
+
+        console.log(payload)
 
         this.signup(payload);
       } else {

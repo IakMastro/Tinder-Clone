@@ -2,9 +2,9 @@ db.users.drop();
 db.users.insertMany([
     {
         _id: 1,
-        email: 'foo.bar@email.com',
-        name: "foo.bar",
-        password: 'lol password ez',
+        email: 'foo@email.com',
+        name: "foo",
+        password: 'bar',
         birthday: "1970/01/01",
         gender: "Male",
         weight: '80kg',

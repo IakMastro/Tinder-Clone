@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 # Mongodb connection initialization to database gameStore'
-app.config['MONGO_URI'] = "mongodb://datinguser:datinguserpasswd@mongodb:27017/tinderClone?authSource=admin"
+app.config['MONGO_URI'] = "mongodb://datinguser:datinguserpasswd@mongodb_tinder:27017/tinderClone?authSource=admin"
 mongo = PyMongo(app)
 
 # Enable CORS (CORS is a library that enables cross-origin requests)
@@ -56,15 +56,16 @@ def register():
     response_object = {'status': 'success'}
     post_data = request.get_json()
 
-    if mongo.db.users.find_one({'email': post_data['email']}) is None:
+    email = post_data.get('email')
+    if mongo.db.users.find_one({'email': email}) is None:
         mongo.db.users.insert({
             '_id': uuid.uuid4().hex,
-            'email': post_data['email'],
-            'username': post_data['username'],
-            'name': post_data['name'],
-            'surname': post_data['surname'],
-            'password': post_data['password'],
-            'birthday': post_data['birthday'],
+            'email': email,
+            'username': post_data.get('username'),
+            'name': post_data.get('name'),
+            'surname': post_data.get('surname'),
+            'password': post_data.get('password'),
+            'birthday': post_data.get('birthday'),
             'type': 'free'
         })
 
@@ -73,14 +74,7 @@ def register():
     else:
         response_object['message'] = 'Email already exists'
 
-    return jsonify(response_object)
-
-
-@app.after_request
-def add_headers(response):
-    response.headers.add('Access-Control-Allow-Origins', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    return response
+    return jsonify(response_object, success=True)
 
 
 if __name__ == '__main__':

@@ -101,7 +101,6 @@
 </template>
 
 <script>
-/* eslint-disable*/
 import axios from 'axios';
 import Alert from './Alert.vue';
 import $ from 'jquery';
@@ -135,9 +134,13 @@ export default {
         email: $('#email').val(),
         password: $('#pwd').val(),
       };
-      console.log(payload)
 
       this.login(payload);
+    },
+
+    beforeCreate() {
+      if (this.$session.exists())
+        this.$router.push('/')
     },
 
     login(payload) {
@@ -148,7 +151,9 @@ export default {
             this.showMessage = true;
 
             if (this.user !== undefined) {
-              console.log("Logged in!")
+              this.$session.start();
+              this.$session.set('user', this.user);
+              this.$router.push('/')
             }
           })
           .catch((error) => {
@@ -185,8 +190,6 @@ export default {
           birthday: this.registerForm.birthday
         };
 
-        console.log(payload)
-
         this.signup(payload);
       } else {
         this.message = 'Passwords must match';
@@ -194,7 +197,7 @@ export default {
     },
 
     signup(payload) {
-      axios.post(this.path + '/signup', payload)
+      axios.post(this.path + '/register', payload)
           .then((res) => {
             this.message = res.data.message;
             this.resetRegisterForm();

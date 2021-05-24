@@ -4,8 +4,6 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 
-# TODO: Find origin of CORS error and fix it
-
 # Configuration
 DEBUG = True
 
@@ -45,7 +43,7 @@ def login():
             response_object['message'] = 'Wrong password! Try again...'
 
     else:
-        response_object['message'] = 'Username is wrong'
+        response_object['message'] = 'Email is wrong'
 
     return jsonify(response_object)
 
@@ -74,7 +72,7 @@ def register():
     else:
         response_object['message'] = 'Email already exists'
 
-    return jsonify(response_object, success=True)
+    return jsonify(response_object)
 
 
 if __name__ == '__main__':

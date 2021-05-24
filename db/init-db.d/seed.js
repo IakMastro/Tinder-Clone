@@ -3,7 +3,9 @@ db.users.insertMany([
     {
         _id: 1,
         email: 'foo@email.com',
+        username: "foo",
         name: "foo",
+        surname: "bar",
         password: 'bar',
         birthday: "1970/01/01",
         gender: "Male",
@@ -17,7 +19,7 @@ db.users.insertMany([
         drinker: false,
         children: false,
         status: "Student",
-        bio: "bla bla bla bla bla bla bla bla bla bla",
+        bio: "bio here",
         pfp: "path",
         photos: "path",
         type: "premium"

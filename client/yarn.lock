@@ -14,7 +14,7 @@
   "resolved" "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.14.0.tgz"
   "version" "7.14.0"
 
-"@babel/core@*", "@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.11.0", "@babel/core@^7.12.0", "@babel/core@^7.13.0", "@babel/core@^7.4.0-0":
+"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.11.0", "@babel/core@^7.12.0", "@babel/core@^7.13.0", "@babel/core@^7.4.0-0":
   "integrity" "sha512-8YqpRig5NmIHlMLw09zMlPTvUVMILjqCOtVgu+TVNWEBvy9b5I3RRyhqnrV4hjgEK7n8P9OqvkWJAFmEL6Wwfw=="
   "resolved" "https://registry.npmjs.org/@babel/core/-/core-7.14.0.tgz"
   "version" "7.14.0"
@@ -2823,7 +2823,7 @@
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
   "version" "2.6.12"
 
-"core-js@^3", "core-js@^3.6.5":
+"core-js@^3.6.5":
   "integrity" "sha512-Ne9DKPHTObRuB09Dru5AjwKjY4cJHVGu+y5f7coGn1E9Grkc3p2iBwE9AI/nJzsE29mQF7oq+mhYYRqOMFN1Bw=="
   "resolved" "https://registry.npmjs.org/core-js/-/core-js-3.12.1.tgz"
   "version" "3.12.1"
@@ -8239,6 +8239,11 @@
   "integrity" "sha512-RRQNLT8Mzr8z7eL4p7BtKvRaTSGdCbTy2+Mm5HTJvLGYSSeG9gDzNasJPP/yOYKLy+/cLG/ftrqq5fvkFwBJEw=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.5.1.tgz"
   "version" "3.5.1"
+
+"vue-session@^1.0.0":
+  "integrity" "sha512-Ep9lRKGgCZdcGV3In3R3zoSp5Wr+hlcIc8WJ9BG+QKzibwaFZnnvp9HBVdd+dU8d6HGLSi5sWywDmd5MkrkfoQ=="
+  "resolved" "https://registry.npmjs.org/vue-session/-/vue-session-1.0.0.tgz"
+  "version" "1.0.0"
 
 "vue-style-loader@^4.1.0", "vue-style-loader@^4.1.2":
   "integrity" "sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg=="

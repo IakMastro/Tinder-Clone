@@ -1,12 +1,34 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <h1>Tinder Clone mark 1</h1>
+
+    <div class="header" v-if="this.$session.exists()">
+      <div id="nav">
+        <router-link to="/">Home</router-link>
+        |
+        <router-link to="/prime">Get Prime</router-link>
+      </div>
+
+      <h1>Hello {{ this.$session.get('user')['username'] }}</h1>
+      <button class="btn btn-primary" @click="logout">Log out</button>
     </div>
-    <router-view/>
+
+    <div class="content">
+      <router-view/>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      this.$session.destroy()
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
 
 <style>
 #app {

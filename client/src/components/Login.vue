@@ -101,9 +101,9 @@
 </template>
 
 <script>
-import axios from 'axios';
-import Alert from './Alert.vue';
-import $ from 'jquery';
+import axios from 'axios'
+import Alert from './Alert.vue'
+import $ from 'jquery'
 
 export default {
   name: 'Login',
@@ -121,11 +121,16 @@ export default {
       message: '',
       showMessage: false,
       path: 'http://localhost:5000',
-    };
+    }
   },
 
   components: {
     Alert,
+  },
+
+  beforeCreate() {
+    if (this.$session.exists())
+      this.$router.push('/')
   },
 
   methods: {
@@ -133,52 +138,48 @@ export default {
       const payload = {
         email: $('#email').val(),
         password: $('#pwd').val(),
-      };
+      }
 
-      this.login(payload);
-    },
-
-    beforeCreate() {
-      if (this.$session.exists())
-        this.$router.push('/')
+      this.login(payload)
     },
 
     login(payload) {
-      axios.put(this.path + '/login', payload)
+      const path = this.path.concat(`/login`)
+      axios.put(path, payload)
           .then((res) => {
-            this.user = res.data.user;
-            this.message = res.data.message;
-            this.showMessage = true;
+            this.user = res.data.user
+            this.message = res.data.message
+            this.showMessage = true
 
             if (this.user !== undefined) {
-              this.$session.start();
-              this.$session.set('user', this.user);
+              this.$session.start()
+              this.$session.set('user', this.user)
               this.$router.push('/')
             }
           })
           .catch((error) => {
-            console.error(error);
+            console.error(error)
           });
     },
 
     initForm() {
-      this.registerForm.username = '';
-      this.registerForm.password = '';
-      this.registerForm.repeatPwd = '';
-      this.user = [];
-      this.message = '';
-      this.showMessage = false;
+      this.registerForm.username = ''
+      this.registerForm.password = ''
+      this.registerForm.repeatPwd = ''
+      this.user = []
+      this.message = ''
+      this.showMessage = false
     },
 
     resetRegisterForm() {
-      this.registerForm.username = '';
-      this.registerForm.password = '';
-      this.registerForm.repeatPwd = '';
+      this.registerForm.username = ''
+      this.registerForm.password = ''
+      this.registerForm.repeatPwd = ''
     },
 
     onSignUp(evt) {
-      evt.preventDefault();
-      this.$refs.registerModal.hide();
+      evt.preventDefault()
+      this.$refs.registerModal.hide()
 
       if (this.registerForm.password === this.registerForm.repeatPwd) {
         const payload = {
@@ -188,21 +189,22 @@ export default {
           surname: this.registerForm.surname,
           password: this.registerForm.password,
           birthday: this.registerForm.birthday
-        };
+        }
 
-        this.signup(payload);
+        this.signup(payload)
       } else {
-        this.message = 'Passwords must match';
+        this.message = 'Passwords must match'
       }
     },
 
     signup(payload) {
-      axios.post(this.path + '/register', payload)
+      const path = this.path.concat('/register')
+      axios.post(path, payload)
           .then((res) => {
-            this.message = res.data.message;
-            this.resetRegisterForm();
-            this.showMessage = true;
-          });
+            this.message = res.data.message
+            this.resetRegisterForm()
+            this.showMessage = true
+          })
     },
   },
 };

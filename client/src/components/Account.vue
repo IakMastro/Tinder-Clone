@@ -1,117 +1,184 @@
 <template>
-  <div class="container" v-if="this.$session.exists()">
+  <div class="container">
+
+    <!--    <hr>-->
+    <!--    <div class="form-group">-->
+    <!--      <h3>Update photo profile</h3>-->
+    <!--      <input type="file" name="pfp" class="form-control-file" id="pfp" @change="onFileChange">-->
+    <!--      <img v-bind:src="imagePreview" width="100" height="100" v-show="showPreview"/>-->
+    <!--      <br><br>-->
+
+    <!--      <button class="btn btn-warning" v-show="showPreview" @click="uploadPhoto">Update photo</button>-->
+    <!--    </div>-->
+
+    <!--    <picture-input ref="pictureInput" @change="onFileChange" width="200" height="200"-->
+    <!--                   margin="8" accept="image/jpeg, image png" size="10"-->
+    <!--                   :removable="true" :custom-strings="{-->
+    <!--                     upload: '<h3>Update photo profile</h3>',-->
+    <!--                     drag: 'Drag your picture here'-->
+    <!--                   }"/>-->
+
     <hr>
-    <h3>Account details</h3>
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name">
-    </div>
+    <alert :message="message" v-if="showMessage"></alert>
+    <button type="button"
+            class="btn btn-info btn-lg"
+            v-b-modal:update-user-modal
+            @click="getUserInfo">
+      Update info
+    </button>
 
-    <div class="form-group">
-      <label for="surname">Surname:</label>
-      <input type="text" class="form-control" id="surname" placeholder="Enter your name" name="name">
-    </div>
-
-    <h3>Gender</h3>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="genderOptions" id="male" value="Male" checked>
-      <label class="form-check-label" for="male">Male</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="genderOptions" id="female" value="Female">
-      <label class="form-check-label" for="female">Female</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="genderOptions" id="other" value="Male">
-      <label class="form-check-label" for="other">Other</label>
-    </div>
-
-    <div class="form-group">
-      <label for="weight">Weight:</label>
-      <input type="number" class="form-control" id="weight" placeholder="50" name="weight">
-    </div>
-
-    <div class="form-group">
-      <label for="height">Height:</label>
-      <input type="number" class="form-control" id="height" placeholder="170" name="height">
-    </div>
-
-    <div class="form-group">
-      <label for="hair_colour">Hair Colour:</label>
-      <input type="text" class="form-control" id="hair_colour" placeholder="Enter your hair colour" name="hair_colour">
-    </div>
-
-    <div class="form-group">
-      <label for="eye_colour">Eye Colour:</label>
-      <input type="text" class="form-control" id="eye_colour" placeholder="Enter your eye colour" name="eye_colour">
-    </div>
-
-    <h3>Sexual Orientation</h3>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="sexualOptions" id="hetero" value="Heterosexual" checked>
-      <label class="form-check-label" for="hetero">Heterosexual</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="sexualOptions" id="homo" value="Homosexual">
-      <label class="form-check-label" for="homo">Homosexual</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="sexualOptions" id="bi" value="Bisexual">
-      <label class="form-check-label" for="bi">Bisexual</label>
-    </div>
-
-    <h3>Education:</h3>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="eduOptions" id="uni" value="University" checked>
-      <label class="form-check-label" for="uni">University</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="eduOptions" id="high" value="High School">
-      <label class="form-check-label" for="high">High School</label>
-    </div>
-
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="eduOptions" id="jun" value="Junior High School">
-      <label class="form-check-label" for="jun">Junior High School</label>
-    </div>
-
-    <div>
-      <label><input type="checkbox" value="">Smoke?</label><br>
-      <label><input type="checkbox" value="">Drink?</label><br>
-      <label><input type="checkbox" value="">Children?</label>
-    </div>
-
-    <div class="form-group">
-      <label for="name">Status:</label>
-      <input type="text" class="form-control" id="status" placeholder="Enter your status ex Student" name="status">
-    </div>
-
-    <div class="form-group">
-      <label for="bio">Bio:</label>
-      <textarea class="form-control" rows="5" placeholder="Talk about you" id="bio"></textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="pfp">Photo Profile:</label>
-      <input type="file" name="pfp" class="form-control-file" id="pfp" @change="onFileChange">
-    </div>
-
-    <button class="btn btn-lg btn-danger">Update Info</button>
+    <b-modal ref="updateUserInfo"
+             id="update-user-modal"
+             title="Update user info"
+             hide-footer>
+      <b-form @submit="updateUser" @reset="resetUpdateForm" class="w-100">
+        <b-form-group id="form-name-group"
+                      label="Name:"
+                      label-for="form-name-input">
+          <b-form-input id="form-name-input"
+                        type="text"
+                        v-model="userForm.name"
+                        required
+                        placeholder="Enter name"/>
+        </b-form-group>
+        <b-form-group id="form-surname-group"
+                      label="Surname:"
+                      label-for="form-surname-input">
+          <b-form-input id="form-surname-input"
+                        type="text"
+                        v-model="userForm.surname"
+                        required
+                        placeholder="Enter surname"/>
+        </b-form-group>
+        <b-form-group id="form-birthday-group"
+                      label="Birthday:"
+                      label-for="form-birthday-input">
+          <b-form-input id="form-birthday-input"
+                        type="date"
+                        v-model="userForm.birthday"
+                        required/>
+        </b-form-group>
+        <b-form-group id="form-gender-group"
+                      label="Gender:"
+                      label-for="form-gender-input">
+          <select id="form-gender-input" v-model="userForm.gender">
+            <option disabled value="">Please select your gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </b-form-group>
+        <b-form-group id="form-weight-group"
+                      label="Weight:"
+                      label-for="form-weight-input">
+          <b-form-input id="form-weight-input"
+                        type="number"
+                        v-model="userForm.weight"
+                        required/>
+        </b-form-group>
+        <b-form-group id="form-height-group"
+                      label="Height:"
+                      label-for="form-height-input">
+          <b-form-input id="form-height-input"
+                        type="text"
+                        v-model="userForm.height"
+                        required/>
+        </b-form-group>
+        <b-form-group id="form-hair-group"
+                      label="Hair Colour:"
+                      label-for="form-hair-input">
+          <b-form-input id="form-hair-input"
+                        type="text"
+                        v-model="userForm.hair_colour"
+                        required
+                        placeholder="Enter your hair colour"/>
+        </b-form-group>
+        <b-form-group id="form-eye-group"
+                      label="Eye Colour:"
+                      label-for="form-eye-input">
+          <b-form-input id="form-eye-input"
+                        type="text"
+                        v-model="userForm.eye_colour"
+                        required
+                        placeholder="Enter your eye colour"/>
+        </b-form-group>
+        <b-form-group id="form-sexual-group"
+                      label="Sexual Orientation:"
+                      label-for="form-sexual-input">
+          <select v-model="userForm.sexual_orientation">
+            <option disabled value="">Please select your sexual orientation</option>
+            <option>Heterosexual</option>
+            <option>Homosexual</option>
+            <option>Bisexual</option>
+            <option>Asexual</option>
+            <option>Other</option>
+          </select>
+        </b-form-group>
+        <b-form-group id="form-education-group"
+                      label="Education:"
+                      label-for="form-education-input">
+          <select v-model="userForm.education">
+            <option disabled value="">Please select your education</option>
+            <option>University</option>
+            <option>Senior High School</option>
+            <option>Junior High School</option>
+            <option>Primary School</option>
+          </select>
+        </b-form-group>
+        <b-form-group id="form-checkbox-group"
+                      label="Do you...?"
+                      label-for="form-checkbox-input">
+          <input type="checkbox"
+                 v-model="userForm.smoker"
+                 true-value="true"
+                 false-value="false">
+          &nbsp;<span>smoke?</span><br>
+          <input type="checkbox"
+                 v-model="userForm.drinker"
+                 true-value="true"
+                 false-value="false">
+          &nbsp;<span>drink?</span><br>
+          <input type="checkbox"
+                 v-model="userForm.children"
+                 true-value="true"
+                 false-value="false">
+          &nbsp;<span>have children?</span><br>
+        </b-form-group>
+        <b-form-group id="form-status-group"
+                      label="Status:"
+                      label-for="form-status-input">
+          <b-form-input id="form-status-input"
+                        type="text"
+                        v-model="userForm.status"
+                        required
+                        placeholder="Enter status"/>
+        </b-form-group>
+        <b-button-group>
+          <b-button type="submit" variant="primary">Submit Changes</b-button>
+          <b-button type="reset" variant="danger">Reset</b-button>
+        </b-button-group>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import Alert from './Alert.vue'
+
 export default {
   name: "Account",
   data() {
     return {
-      pfp: null
+      message: '',
+      userForm: {},
+      showMessage: false,
+      path: `http://localhost:5000/user/${this.$session.get('user')['_id']}`
     }
+  },
+
+  components: {
+    Alert
   },
 
   beforeCreate() {
@@ -120,9 +187,52 @@ export default {
   },
 
   methods: {
-    onFileChange(evt) {
-      this.pfp = evt.target.files[0]
+    updateUser(evt) {
+      evt.preventDefault()
+      this.$refs.updateUserInfo.hide()
+
+      const payload = {
+        name: this.userForm.name,
+        surname: this.userForm.surname,
+        birthday: this.userForm.birthday,
+        gender: this.userForm.gender,
+        weight: this.userForm.weight,
+        height: this.userForm.height,
+        hair_colour: this.userForm.hair_colour,
+        eye_colour: this.userForm.eye_colour,
+        sexual_orientation: this.userForm.sexual_orientation,
+        education: this.userForm.education,
+        smoker: this.userForm.smoker,
+        drinker: this.userForm.drinker,
+        children: this.userForm.children,
+        status: this.userForm.status
+      }
+
+      axios.put(this.path, payload).then((res) => {
+        this.getUserInfo()
+        this.message = res.data.message
+        this.showMessage = true
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
+
+    resetUpdateForm(evt) {
+      evt.preventDefault()
+      this.userForm = this.$session.get('user')
+    },
+
+    getUserInfo() {
+      axios.get(this.path).then((res) => {
+        this.$session.set('user', res.data.user)
+      })
+
+      this.userForm = this.$session.get('user')
     }
+  },
+
+  created() {
+    this.getUserInfo()
   }
 }
 </script>

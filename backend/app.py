@@ -17,7 +17,7 @@ mongo = PyMongo(app)
 
 # Enable CORS (CORS is a library that enables cross-origin requests)
 # For example different protocol, IP address, domain name or port
-CORS(app)
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 
 # Sanity check route
@@ -64,6 +64,7 @@ def register():
             'surname': post_data.get('surname'),
             'password': post_data.get('password'),
             'birthday': post_data.get('birthday'),
+            'pfp': 'img/default/default.jpg',
             'type': 'free'
         })
 
@@ -71,6 +72,41 @@ def register():
 
     else:
         response_object['message'] = 'Email already exists'
+
+    return jsonify(response_object)
+
+
+@app.route('/user/<user_id>', methods=['PUT', 'GET'])
+@cross_origin()
+def single_user(user_id):
+    response_object = {'status': 'success'}
+
+    if request.method == 'GET':
+        response_object['user'] = mongo.db.users.find_one({"_id": user_id})
+
+    elif request.method == 'PUT':
+        post_data = request.get_json()
+
+        mongo.db.users.update_one({"_id": user_id}, {
+            "$set": {
+                'name': post_data.get('name'),
+                'surname': post_data.get('surname'),
+                'birthday': post_data.get('birthday'),
+                'gender': post_data.get('gender'),
+                'weight': post_data.get('weight'),
+                'height': post_data.get('height'),
+                'hair_colour': post_data.get('hair_colour'),
+                'eye_colour': post_data.get('eye_colour'),
+                'sexual_orientation': post_data.get('sexual_orientation'),
+                'education': post_data.get('education'),
+                'smoker': post_data.get('smoker'),
+                'drinker': post_data.get('drinker'),
+                'children': post_data.get('children'),
+                'status': post_data.get('status')
+            }
+        })
+
+        response_object['message'] = "Your info updated!"
 
     return jsonify(response_object)
 

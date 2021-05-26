@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <hr>
     <h3>Plan</h3>
     <div class="form-check form-check-inline">
       <input class="form-check-input" type="radio" name="planOptions" id="one_month" value="12" checked>

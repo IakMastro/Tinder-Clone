@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from flask import Flask, jsonify, request
@@ -108,6 +109,24 @@ def single_user(user_id):
 
         response_object['message'] = "Your info updated!"
 
+    return jsonify(response_object)
+
+
+@app.route("/", methods=['GET'])
+@cross_origin()
+def all_users():
+    response_object = {'status': 'success'}
+    query = []
+
+    for user in mongo.db.users.find():
+        query.append({
+            'email': user['email'],
+            'name': user['name'],
+            'surname': user['surname'],
+            'birthday': user['birthday']
+        })
+
+    response_object['users'] = query
     return jsonify(response_object)
 
 

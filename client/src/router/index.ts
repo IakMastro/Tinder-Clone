@@ -3,12 +3,18 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Account from '../components/Account.vue'
 import Login from '../components/Login.vue'
 import Prime from '../components/Prime.vue'
+import Users from '../components/Users.vue'
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
+    name: 'Users',
+    component: Users
+  },
+  {
+    path: '/settings',
     name: 'Account',
     component: Account
   },

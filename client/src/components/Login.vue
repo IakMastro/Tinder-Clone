@@ -104,6 +104,7 @@
 import axios from 'axios'
 import Alert from './Alert.vue'
 import $ from 'jquery'
+import {calculate_age} from "@/ts/lib";
 
 export default {
   name: 'Login',
@@ -181,7 +182,8 @@ export default {
       evt.preventDefault()
       this.$refs.registerModal.hide()
 
-      if (this.registerForm.password === this.registerForm.repeatPwd) {
+      if (calculate_age(this.registerForm.birthday) > 17 &&
+          this.registerForm.password === this.registerForm.repeatPwd) {
         const payload = {
           email: this.registerForm.email,
           username: this.registerForm.email.split("@")[0],
@@ -192,8 +194,12 @@ export default {
         }
 
         this.signup(payload)
-      } else {
+      } else if (this.registerForm.password !== this.registerForm.repeatPwd) {
         this.message = 'Passwords must match'
+        this.showMessage = true
+      } else {
+        this.message = 'You must be over 18 to register'
+        this.showMessage = true
       }
     },
 

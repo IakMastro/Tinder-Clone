@@ -15,6 +15,8 @@
     "vue": "^2.6.11",
     "vue-age": "^1.0.0",
     "vue-class-component": "^7.2.3",
+    "vue-credit-card-validation": "^0.1.10",
+    "vue-paypal-checkout": "^3.2.0",
     "vue-picture-input": "^2.1.6",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.2.0",

@@ -4,4 +4,3 @@ node_modules
 data
 client/package-lock.json
 client/yarn.lock
-backend/img

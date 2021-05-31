@@ -6,6 +6,8 @@
       <div id="nav">
         <router-link to="/">Home</router-link>
         |
+        <router-link to="/settings">Account Settings</router-link>
+        |
         <router-link to="/prime">Get Prime</router-link>
       </div>
 

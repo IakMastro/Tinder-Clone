@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, url_for
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 
@@ -65,7 +65,7 @@ def register():
             'surname': post_data.get('surname'),
             'password': post_data.get('password'),
             'birthday': post_data.get('birthday'),
-            'pfp': 'img/default/default.jpg',
+            'pfp': 'default.jpg',
             'type': 'free'
         })
 
@@ -119,15 +119,34 @@ def all_users():
     query = []
 
     for user in mongo.db.users.find():
-        query.append({
-            'email': user['email'],
-            'name': user['name'],
-            'surname': user['surname'],
-            'birthday': user['birthday']
-        })
+        del user['password']
+        del user['_id']
+        query.append(user)
 
     response_object['users'] = query
     return jsonify(response_object)
+
+
+@app.route("/img/<path:filename>", methods=["GET"])
+@cross_origin()
+def get_img(filename):
+    return mongo.send_file(filename)
+
+
+@app.route("/img/<path:filename>", methods=["POST"])
+@cross_origin()
+def save_image(filename):
+    if 'photo' in request.files:
+        photo = request.files['photo']
+        mongo.save_file(filename, photo)
+        mongo.db.users.update_one({'username': request.form.get('user')}, {
+            '$set':
+                {
+                    'pfp': filename,
+                }
+        })
+
+    return jsonify({'status': 'success'})
 
 
 if __name__ == '__main__':

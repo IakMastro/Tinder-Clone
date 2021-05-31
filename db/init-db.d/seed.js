@@ -20,7 +20,7 @@ db.users.insertMany([
         children: false,
         status: "Student",
         bio: "bio here",
-        pfp: "path",
+        pfp: "default.jpg",
         photos: "path",
         type: "premium"
     }

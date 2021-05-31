@@ -1,22 +1,14 @@
 <template>
   <div class="container">
 
-    <!--    <hr>-->
-    <!--    <div class="form-group">-->
-    <!--      <h3>Update photo profile</h3>-->
-    <!--      <input type="file" name="pfp" class="form-control-file" id="pfp" @change="onFileChange">-->
-    <!--      <img v-bind:src="imagePreview" width="100" height="100" v-show="showPreview"/>-->
-    <!--      <br><br>-->
+    <hr>
+    <user-details :user="this.$session.get('user')"></user-details>
 
-    <!--      <button class="btn btn-warning" v-show="showPreview" @click="uploadPhoto">Update photo</button>-->
-    <!--    </div>-->
-
-    <!--    <picture-input ref="pictureInput" @change="onFileChange" width="200" height="200"-->
-    <!--                   margin="8" accept="image/jpeg, image png" size="10"-->
-    <!--                   :removable="true" :custom-strings="{-->
-    <!--                     upload: '<h3>Update photo profile</h3>',-->
-    <!--                     drag: 'Drag your picture here'-->
-    <!--                   }"/>-->
+    <hr>
+    <label>Upload Image for Profile
+      <input type="file" id="file" ref="file" v-on:change="handleFileUpload">
+    </label>
+    <button class="btn btn-dark" v-on:click="submitFile">Submit</button>
 
     <hr>
     <alert :message="message" v-if="showMessage"></alert>
@@ -164,7 +156,8 @@
 
 <script>
 import axios from 'axios'
-import Alert from './Alert.vue'
+import UserDetails from "@/components/UserDetails";
+import Alert from '@/components/Alert.vue'
 
 export default {
   name: "Account",
@@ -173,12 +166,14 @@ export default {
       message: '',
       userForm: {},
       showMessage: false,
-      path: `http://localhost:5000/user/${this.$session.get('user')['_id']}`
+      path: `http://localhost:5000/user/${this.$session.get('user')['_id']}`,
+      file: ''
     }
   },
 
   components: {
-    Alert
+    Alert,
+    UserDetails,
   },
 
   beforeCreate() {
@@ -228,6 +223,24 @@ export default {
       })
 
       this.userForm = this.$session.get('user')
+    },
+    handleFileUpload() {
+      this.file = this.$refs.file.files[0]
+    },
+
+    submitFile() {
+      let formData = new FormData()
+
+      formData.append('photo', this.file)
+      formData.append('user', this.$session.get('user')['username'])
+
+      const path = `http://localhost:5000/img/${this.file.name}`
+      console.log(path)
+      axios.post(path, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(() => console.log("Success!")).catch((error) => console.error(error))
     }
   },
 

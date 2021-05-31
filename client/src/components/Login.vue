@@ -155,7 +155,7 @@ export default {
             if (this.user !== undefined) {
               this.$session.start()
               this.$session.set('user', this.user)
-              this.$router.push('/')
+              this.$router.push('/settings')
             }
           })
           .catch((error) => {
@@ -182,7 +182,7 @@ export default {
       evt.preventDefault()
       this.$refs.registerModal.hide()
 
-      if (calculate_age(this.registerForm.birthday) > 17 &&
+      if (//calculate_age(this.registerForm.birthday) > 17 &&
           this.registerForm.password === this.registerForm.repeatPwd) {
         const payload = {
           email: this.registerForm.email,

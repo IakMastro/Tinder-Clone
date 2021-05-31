@@ -7,7 +7,7 @@
 
     <ul>
       <li v-for="(user, index) in users" :key="index">
-        {{ user.name }} {{ user.surname }} <b>{{ user.age }}</b>
+        <user-details :user="user"></user-details>
       </li>
     </ul>
   </div>
@@ -16,10 +16,16 @@
 <script>
 import axios from 'axios'
 import Alert from './Alert.vue'
+import UserDetails from "@/components/UserDetails";
 import {calculate_age} from '@/ts/lib'
 
 export default {
   name: "Index",
+
+  beforeCreate() {
+    if (!this.$session.exists())
+      this.$router.push('/login')
+  },
 
   data() {
     return {
@@ -32,6 +38,7 @@ export default {
 
   components: {
     Alert,
+    UserDetails
   },
 
   methods: {
@@ -39,10 +46,23 @@ export default {
       axios.get(this.path).then((res) => {
         res.data.users.forEach(user => {
           this.users.push({
+            pfp: user.pfp,
+            username: user.username,
             email: user.email,
             name: user.name,
             surname: user.surname,
-            age: calculate_age(new Date(user.birthday))
+            birthday: user.birthday,
+            bio: user.bio,
+            gender: user.gender,
+            weight: user.weight,
+            height: user.height,
+            eye_colour: user.eye_colour,
+            sexual_orientation: user.sexual_orientation,
+            education: user.education,
+            smoker: user.smoker,
+            drinker: user.drinker,
+            children: user.children,
+            status: user.status,
           })
         })
       })

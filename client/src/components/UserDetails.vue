@@ -1,23 +1,38 @@
 <template>
-  <div class="container">
-    <h2>User Details</h2>
-    <photo :user_photo="user.pfp" v-if="user.pfp"/>
-    <p>Username: {{ user.username }}</p>
-    <p>Name: {{ user.name }}</p>
-    <p>Surname: {{ user.surname }}</p>
-    <p>Age: {{ age }}</p>
-    <p>Birthday: {{ user.birthday }}</p>
-    <p v-if="user.bio">Bio: {{ user.bio }}</p>
-    <p v-if="user.gender">Gender: {{ user.gender }}</p>
-    <p v-if="user.weight">Weight: {{ user.weight }}kg</p>
-    <p v-if="user.height">Height: {{ user.height }}m</p>
-    <p v-if="user.eye_colour">Eye colour: {{ user.eye_colour }}</p>
-    <p v-if="user.sexual_orientation">Sexual orientation: {{ user.sexual_orientation }}</p>
-    <p v-if="user.education">Education: {{ user.education }}</p>
-    <p v-if="user.smoker">Smokes</p>
-    <p v-if="user.drinker">Drinks</p>
-    <p v-if="user.children">Has children</p>
-    <p v-if="user.status">Status: {{ user.status }}</p>
+  <div class="container shadow p-3 mb-4" style="color: white; background-color: #303030; border-radius: 20px;">
+    <photo :user="user"/>
+
+    <div class="mt-2 row">
+
+      <button type="button" @click="goToProfile(user)"
+              class="btn hide-text" style="width:100%; border: none !important; color: white;"
+              role="button">
+        <h4 class="hide-text">{{ user.name }} {{ user.surname }}</h4>
+      </button>
+
+    </div>
+    <div class="mt-1 row">
+      <h4 class="hide-text">{{ age }} years old</h4>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text" v-if="this.user.bio">{{ user.bio }}</p>
+      <p v-else><br></p>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text">{{ user.gender }}</p>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text">{{ user.weight }}kg</p>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text">{{ user.height }}cm</p>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text">{{ user.eye_colour }} eyes</p>
+    </div>
+    <div class="mt-1 row">
+      <p class="hide-text">{{ user.hair_colour }} hair</p>
+    </div>
   </div>
 </template>
 
@@ -40,8 +55,22 @@ export default {
 
   props: ['user'],
 
+  methods: {
+    goToProfile(user) {
+      this.$router.push(`/profile/${user._id}`)
+      // window.location.replace("/profile/" + user.id);
+    }
+  },
+
   created() {
+    this.age = calculate_age(new Date(this.user.birthday))
+  },
+  updated() {
+    this.age = calculate_age(new Date(this.user.birthday))
+  },
+  mounted() {
     this.age = calculate_age(new Date(this.user.birthday))
   }
 }
 </script>
+

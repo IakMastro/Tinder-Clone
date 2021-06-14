@@ -3,22 +3,25 @@
     <alert :message="message" v-if="showMessage"></alert>
     <h5>Welcome back!</h5>
 
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+    <div class="d-flex flex-column justify-content-center align-items-center container p-5 shadow"
+         style="color: white; background-color: #303030; border-radius: 20px; width: 40%;">
+
+      <div class="mb-4 form-floating">
+        <input type="email" class="form-control" id="email" name="email" placeholder=" ">
+        <label for="email" style="color: rgba(0, 0, 0, 0.5);">Email</label>
+      </div>
+      <div class="mb-3 form-floating">
+        <input type="password" class="form-control" id="pwd" name="pwd" placeholder=" ">
+        <label for="pwd" style="color: rgba(0, 0, 0, 0.5);">Password</label>
+      </div>
+
+
+      <button type="submit"
+              class="btn btn-primary"
+              @click="onLogin">
+        Log In
+      </button>
     </div>
-
-    <div class="form-group">
-      <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
-    </div>
-
-    <button type="submit"
-            class="btn btn-primary"
-            @click="onLogin">
-      Log In
-    </button>
-
     <hr>
     <h5>New here?</h5>
     <button type="button"
@@ -90,6 +93,57 @@
                         v-model="registerForm.birthday"
                         required>
           </b-form-input>
+          <b-form-group id="form-gender-group"
+                        label="Gender:"
+                        label-for="form-gender-input">
+            <select id="form-gender-input" v-model="registerForm.gender">
+              <option disabled value="">Please select your gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <!--            <option>Other</option>-->
+            </select>
+          </b-form-group>
+          <b-form-group id="form-weight-group"
+                        label="Weight:"
+                        label-for="form-weight-input">
+            <b-form-input id="form-weight-input"
+                          type="number"
+                          v-model="registerForm.weight"
+                          required/>
+          </b-form-group>
+          <b-form-group id="form-height-group"
+                        label="Height:"
+                        label-for="form-height-input">
+            <b-form-input id="form-height-input"
+                          type="text"
+                          v-model="registerForm.height"
+                          required/>
+          </b-form-group>
+          <b-form-group id="form-hair-group"
+                        label="Hair Colour:"
+                        label-for="form-hair-input">
+            <select id="form-hair-input" v-model="registerForm.hair_colour">
+              <option disabled value="">Please select your gender</option>
+              <option>Dark</option>
+              <option>Blonde</option>
+              <option>Ginger</option>
+            </select>
+          </b-form-group>
+          <b-form-group id="form-eye-group"
+                        label="Eye Colour:"
+                        label-for="form-eye-input">
+            <select id="form-eye-input" v-model="registerForm.eye_colour">
+              <option disabled value="">Please select your gender</option>
+              <option>Blue</option>
+              <option>Brown</option>
+              <option>Green</option>
+            </select>
+          </b-form-group>
+          <b-form-group id="form-bio-group"
+                        label="Bio:"
+                        label-for="form-bio-input">
+            <b-form-textarea id="form-bio-input" v-model="registerForm.bio"></b-form-textarea>
+          </b-form-group>
         </b-form-group>
         <b-button-group>
           <b-button type="submit" variant="primary">Submit</b-button>
@@ -182,7 +236,7 @@ export default {
       evt.preventDefault()
       this.$refs.registerModal.hide()
 
-      if (//calculate_age(this.registerForm.birthday) > 17 &&
+      if (calculate_age(new Date(this.registerForm.birthday)) > 17 &&
           this.registerForm.password === this.registerForm.repeatPwd) {
         const payload = {
           email: this.registerForm.email,
@@ -190,7 +244,13 @@ export default {
           name: this.registerForm.name,
           surname: this.registerForm.surname,
           password: this.registerForm.password,
-          birthday: this.registerForm.birthday
+          birthday: this.registerForm.birthday,
+          gender: this.registerForm.gender,
+          weight: this.registerForm.weight,
+          height: this.registerForm.height,
+          hair_colour: this.registerForm.hair_colour,
+          eye_colour: this.registerForm.eye_colour,
+          bio: this.registerForm.bio
         }
 
         this.signup(payload)

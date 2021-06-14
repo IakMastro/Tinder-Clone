@@ -21,17 +21,11 @@ mongo = PyMongo(app)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 
-# Sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify("pong!")
-
-
 # Routing
 @app.route('/login', methods=['PUT'])
 @cross_origin()
 def login():
-    response_object = {'status': 'success'}
+    response_object = {}
     post_data = request.get_json()
 
     user = mongo.db.users.find_one({"email": post_data['email']})
@@ -39,10 +33,8 @@ def login():
         if post_data['password'] == user['password']:
             response_object['message'] = 'Logged in successfully!'
             response_object['user'] = user
-
         else:
             response_object['message'] = 'Wrong password! Try again...'
-
     else:
         response_object['message'] = 'Email is wrong'
 
@@ -52,7 +44,7 @@ def login():
 @app.route('/register', methods=['POST'])
 @cross_origin()
 def register():
-    response_object = {'status': 'success'}
+    response_object = {}
     post_data = request.get_json()
 
     email = post_data.get('email')
@@ -65,12 +57,17 @@ def register():
             'surname': post_data.get('surname'),
             'password': post_data.get('password'),
             'birthday': post_data.get('birthday'),
+            'gender': post_data.get('gender'),
+            'weight': int(post_data.get('weight')),
+            'height': int(post_data.get('height')),
+            'hair_colour': post_data.get('hair_colour'),
+            'eye_colour': post_data.get('eye_colour'),
+            'bio': post_data.get('bio'),
             'pfp': 'default.jpg',
             'type': 'free'
         })
 
         response_object['message'] = 'User made!'
-
     else:
         response_object['message'] = 'Email already exists'
 
@@ -80,7 +77,7 @@ def register():
 @app.route('/user/<user_id>', methods=['PUT', 'GET'])
 @cross_origin()
 def single_user(user_id):
-    response_object = {'status': 'success'}
+    response_object = {}
 
     if request.method == 'GET':
         response_object['user'] = mongo.db.users.find_one({"_id": user_id})
@@ -92,38 +89,58 @@ def single_user(user_id):
             "$set": {
                 'name': post_data.get('name'),
                 'surname': post_data.get('surname'),
+                'email': post_data.get('email'),
                 'birthday': post_data.get('birthday'),
                 'gender': post_data.get('gender'),
-                'weight': post_data.get('weight'),
-                'height': post_data.get('height'),
+                'weight': int(post_data.get('weight')),
+                'height': int(post_data.get('height')),
                 'hair_colour': post_data.get('hair_colour'),
                 'eye_colour': post_data.get('eye_colour'),
-                'sexual_orientation': post_data.get('sexual_orientation'),
-                'education': post_data.get('education'),
-                'smoker': post_data.get('smoker'),
-                'drinker': post_data.get('drinker'),
-                'children': post_data.get('children'),
-                'status': post_data.get('status')
+                'bio': post_data.get('bio')
             }
         })
 
-        response_object['message'] = "Your info updated!"
+        response_object['message'] = "Your info has been updated!"
 
     return jsonify(response_object)
 
 
-@app.route("/", methods=['GET'])
+@app.route('/referral/<code>')
 @cross_origin()
-def all_users():
-    response_object = {'status': 'success'}
+def check_code(code):
+    response_object = {}
+
+    if mongo.db.users.find_one({"username": code}) is not None:
+        response_object['message'] = 'OK'
+
+    else:
+        response_object['message'] = 'NOT FOUND'
+
+    return jsonify(response_object)
+
+
+def get_users(users):
     query = []
 
-    for user in mongo.db.users.find():
+    for user in users:
         del user['password']
-        del user['_id']
         query.append(user)
 
-    response_object['users'] = query
+    return query
+
+
+@app.route("/", methods=['GET', 'POST'])
+@cross_origin()
+def all_users():
+    response_object = {}
+
+    if request.method == 'GET':
+        response_object['users'] = get_users(mongo.db.users.find())
+    elif request.method == 'POST':
+        post_data = request.get_json()
+        search_filter = post_data.get('filter')
+        response_object['users'] = get_users(mongo.db.users.find(search_filter))
+
     return jsonify(response_object)
 
 
@@ -146,7 +163,15 @@ def save_image(filename):
                 }
         })
 
-    return jsonify({'status': 'success'})
+
+@app.route("/prime/<user_id>", methods=["PUT"])
+@cross_origin()
+def prime_user(user_id):
+    mongo.db.users.update_one({"_id": user_id}, {
+        '$set': {
+            'type': 'premium'
+        }
+    })
 
 
 if __name__ == '__main__':
